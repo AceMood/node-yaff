@@ -1,0 +1,26 @@
+{
+  "name": "node-yaff",
+  "version": "1.0.0",
+  "description": "Yet Another Files Finder in Node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AceMood/node-yaff.git"
+  },
+  "keywords": [
+    "node",
+    "files finder"
+  ],
+  "author": "AceMood",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AceMood/node-yaff/issues"
+  },
+  "homepage": "https://github.com/AceMood/node-yaff#readme",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
