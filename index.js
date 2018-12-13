@@ -36,6 +36,7 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
                     readDir(cur)
                 } else {
                     var ext = path.extname(cur);
+                    // if file does not have a extension, the `extname` will return the whole file path
                     if (extensions === '*' || extensions.indexOf(ext) !== -1) {
                         result.push([cur, stat.mtime.getTime()])
                     }
@@ -68,7 +69,7 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
             if (activeCalls === 0) {
                 resolve(result)
             }
-        });
+        })
     }
 
     dirs.forEach(readDir);
@@ -138,7 +139,7 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
  * Finder Class
  * @param {Array.<string>|String} dirs dirs to be scanned, ex: ['html']
  * @param {Array.<string>|String} extensions  extensions, ex: ['.js']
- * @param {?Function} ignore  Optional function to filter out paths
+ * @param {Function=} ignore  Optional function to filter out paths
  * @param {boolean} native  whether use native shell command
  */
 function Finder(dirs, extensions, ignore, native) {
