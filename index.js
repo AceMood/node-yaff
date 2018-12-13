@@ -9,85 +9,102 @@ var fs = require('fs');
 var path = require('path');
 var os = require('os');
 var spawn = require('child_process').spawn;
+var toString = Object.prototype.toString;
+var isArray = Array.isArray ? Array.isArray : function isArray(val) {
+    return toString.call(val) === '[object Array]'
+};
 
-function findInNode(dirs, extensions, ignore, cb) {
+function findInNode(dirs, extensions, ignore, resolve, reject) {
+    // store files matched. second is mtime in milliseconds
     var result = [];
+    // tasks can not be finished when activeCalls greater than zero
     var activeCalls = 0;
 
-    function readFile(curFile) {
-        if (ignore && ignore(curFile)) {
-            return;
+    function readFile(cur) {
+        if (ignore && ignore(cur)) {
+            return
         }
+
         activeCalls++;
 
-        fs.lstat(curFile, function(err, stat) {
+        fs.lstat(cur, function(err, stat) {
             activeCalls--;
 
+            // eliminate symbolic-link
             if (!err && stat && !stat.isSymbolicLink()) {
                 if (stat.isDirectory()) {
-                    readDirRecursive(curFile)
+                    readDir(cur)
                 } else {
-                    var ext = path.extname(curFile);
-                    if (extensions.indexOf(ext) !== -1) {
-                        result.push([curFile, stat.mtime.getTime()])
+                    var ext = path.extname(cur);
+                    if (extensions === '*' || extensions.indexOf(ext) !== -1) {
+                        result.push([cur, stat.mtime.getTime()])
                     }
                 }
             }
 
             if (activeCalls === 0) {
-                cb(result)
+                resolve(result)
             }
-        });
+        })
     }
 
-    function readDirRecursive(curDir) {
+    function readDir(cur) {
         activeCalls++;
-        fs.readdir(curDir, function(err, names) {
+
+        fs.readdir(cur, function(err, names) {
             if (err) {
-                throw err
+                reject(err)
             }
 
             activeCalls--;
 
             // normalizing file path
             for (var i = 0; i < names.length; i++) {
-                names[i] = path.join(curDir, names[i])
+                names[i] = path.join(cur, names[i])
             }
 
             names.forEach(readFile);
 
             if (activeCalls === 0) {
-                cb(result)
+                resolve(result)
             }
         });
     }
 
-    dirs.forEach(readDirRecursive);
+    dirs.forEach(readDir);
 }
 
-function findInNative(dirs, extensions, ignore, cb) {
+// @see https://shapeshed.com/unix-find/#what-is-the-find-command-in-unix
+function findInNative(dirs, extensions, ignore, resolve, reject) {
+    // in Windows we only use node
     if (os.platform() === 'win32') {
-        return findInNode(dirs, extensions, ignore, cb);
+        return findInNode(dirs, extensions, ignore, resolve, reject);
     }
 
     var args = [].concat(dirs);
     args.push('-type', 'f');
-    extensions.forEach(function(ext, index) {
-        if (index) {
-            args.push('-o')
-        }
-        args.push('-iname');
-        args.push('*' + ext)
-    });
+
+    if (extensions === '*') {
+
+    } else {
+        extensions.forEach(function loop(ext, index) {
+            if (index) {
+                args.push('-o')
+            }
+            args.push('-iname');
+            args.push('*' + ext)
+        });
+    }
 
     var findProcess = spawn('find', args);
     var stdout = '';
+
     findProcess.stdout.setEncoding('utf-8');
-    findProcess.stdout.on('data', function(data) {
+    findProcess.stdout.on('data', function out(data) {
         stdout += data
     });
 
-    findProcess.stdout.on('close', function() {
+    findProcess.stdout.on('close', function close() {
         // split by lines, trimming the trailing newline
         var lines = stdout.trim().split('\n');
         if (ignore) {
@@ -99,17 +116,18 @@ function findInNative(dirs, extensions, ignore, cb) {
         var result = [];
         var count = lines.length;
 
-        lines.forEach(function(path) {
-            fs.stat(path, function(err, stat) {
+        lines.forEach(function loop(filepath) {
+            fs.stat(filepath, function(err, stat) {
                 if (err) {
-                    throw err
+                    reject(err)
                 }
 
                 if (stat && !stat.isDirectory()) {
-                    result.push([path, stat.mtime.getTime()]);
+                    result.push([filepath, stat.mtime.getTime()])
                 }
+
                 if (--count === 0) {
-                    cb(result)
+                    resolve(result)
                 }
             });
         })
@@ -117,16 +135,19 @@ function findInNative(dirs, extensions, ignore, cb) {
 }
 
 /**
- * Class
- * @param  {Array.<string>} dirs    dirs to be scanned, ex: ['html']
- * @param  {Array.<string>} extensions  extensions, ex: ['.js']
- * @param  {?Function}      ignore  Optional function to filter out paths
- * @param  {boolean}        native  whether use native shell command
- * @return {!Object}
+ * Finder Class
+ * @param {Array.<string>|String} dirs dirs to be scanned, ex: ['html']
+ * @param {Array.<string>|String} extensions  extensions, ex: ['.js']
+ * @param {?Function} ignore  Optional function to filter out paths
+ * @param {boolean} native  whether use native shell command
  */
 function Finder(dirs, extensions, ignore, native) {
-    this.dirs = dirs || ['.'];
-    this.extensions = exts || ['.js'];
+    if (!dirs || !isArray(dirs)) {
+        dirs = ['.'];
+    }
+
+    this.dirs = typeof dirs === 'string' ? [dirs] : dirs;
+    this.extensions = extensions || '*';
     this.ignore = ignore || null;
     this.native = native || false;
 }
@@ -135,9 +156,12 @@ Finder.findInNode = findInNode;
 
 Finder.findInNative = findInNative;
 
-Finder.prototype.find = function find(cb) {
-    var impl = this.native ? findInNative : findInNode;
-    impl(this.dirs, this.extensions, this.ignore, cb)
+Finder.prototype.find = function find() {
+    var self = this;
+    return new Promise(function executor(resolve, reject) {
+        var impl = self.native ? findInNative : findInNode;
+        impl(self.dirs, self.extensions, self.ignore, resolve, reject)
+    });
 };
 
 module.exports = Finder;
