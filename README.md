@@ -3,6 +3,34 @@
 Yet Another Files Finder in Node. Provide a unique way to walk through specific directories
 an trigger callback function when find a matched file.
 
+# API
+
+```javascript
+class Finder(dirs, extensions, ignore, native);
+
+Finder.prototype.find: Promise;
+
+Finder.findInNative(dirs, extensions, ignore, resolve, reject): void;
+
+Finder.findInNative(dirs, extensions, ignore, resolve, reject): void;
+```
+
+*dirs:Array|String|undefined*
+
+directories to be scanned. Defaults to '.'
+
+*extensions:Array|String|undefined*
+
+file extensions to be matched. Defaults to '*'
+
+*ignore:Function|undefined*
+
+ignore function that accept a filePath and decide whether ignore it or not
+
+*native: boolean|undefined*
+
+use shell or node logic
+
 # Usage
 
 Currently node-yaff only used for programmatically.

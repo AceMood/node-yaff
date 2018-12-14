@@ -15,7 +15,7 @@
     "files finder"
   ],
   "engines": {
-    "node": ">=4.9.0"
+    "node": ">=4.0.0"
   },
   "author": "AceMood",
   "license": "MIT",

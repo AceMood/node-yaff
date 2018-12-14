@@ -75,18 +75,19 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
     dirs.forEach(readDir);
 }
 
-// @see https://shapeshed.com/unix-find/#what-is-the-find-command-in-unix
+// @see http://man7.org/linux/man-pages/man1/find.1.html
 function findInNative(dirs, extensions, ignore, resolve, reject) {
-    // in Windows we only use node
+    // in Windows we use node-fashion-find
     if (os.platform() === 'win32') {
         return findInNode(dirs, extensions, ignore, resolve, reject);
     }
 
     var args = [].concat(dirs);
+    // only find file type, exclude all symbolic-links and directories
     args.push('-type', 'f');
 
     if (extensions === '*') {
-
+        // do nothing
     } else {
         extensions.forEach(function loop(ext, index) {
             if (index) {
@@ -94,7 +95,7 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
             }
             args.push('-iname');
             args.push('*' + ext)
-        });
+        })
     }
 
     var findProcess = spawn('find', args);
@@ -108,23 +109,27 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
     findProcess.stdout.on('close', function close() {
         // split by lines, trimming the trailing newline
         var lines = stdout.trim().split('\n');
+        lines = lines.map(function map(p) {
+            return path.normalize(p)
+        });
+
         if (ignore) {
-            lines = lines.filter(function(x) {
-                return !ignore(x)
+            lines = lines.filter(function filter(p) {
+                return !ignore(p)
             })
         }
 
         var result = [];
         var count = lines.length;
 
-        lines.forEach(function loop(filepath) {
-            fs.stat(filepath, function(err, stat) {
+        lines.forEach(function loop(filePath) {
+            fs.stat(filePath, function(err, stat) {
                 if (err) {
                     reject(err)
                 }
 
                 if (stat && !stat.isDirectory()) {
-                    result.push([filepath, stat.mtime.getTime()])
+                    result.push([filePath, stat.mtime.getTime()])
                 }
 
                 if (--count === 0) {
@@ -139,8 +144,8 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
  * Finder Class
  * @param {Array.<string>|String} dirs dirs to be scanned, ex: ['html']
  * @param {Array.<string>|String} extensions  extensions, ex: ['.js']
- * @param {Function=} ignore  Optional function to filter out paths
- * @param {boolean} native  whether use native shell command
+ * @param {Function=} ignore Optional. Function to filter out paths
+ * @param {boolean} native Optional. Whether use shell command
  */
 function Finder(dirs, extensions, ignore, native) {
     if (!dirs || !isArray(dirs)) {
