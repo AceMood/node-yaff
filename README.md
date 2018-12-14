@@ -1,13 +1,18 @@
 # node-yaff
 
-Yet Another Files Finder in Node. Provide a unique way to walk through specific directories
-an trigger callback function when find a matched file.
+Yet Another Files Finder in Node. Provide a unique way to walk through specific directories when find all matched files.
 
-[![Build Status](https://img.shields.io/travis/AceMood/node-yaff/master.svg)](https://travis-ci.org/AceMood/node-yaff)
-
-[![Download Count](https://img.shields.io/npm/dt/localeval.svg)]
-
-[![Coveralls](https://img.shields.io/coveralls/AceMood/node-yaff/master.svg)](https://coveralls.io/AceMood/node-yaff)
+<p align="center">
+    <a href="https://travis-ci.org/AceMood/node-yaff">
+        <img src="https://img.shields.io/travis/AceMood/node-yaff/master.svg" alt="Build Status" />
+    </a>
+    <a href="https://npmcharts.com/compare/node-yaff?minimal=true">
+        <img src="https://img.shields.io/npm/dt/node-yaff.svg" alt="Downloads">
+    </a>
+    <a href="https://coveralls.io/github/AceMood/node-yaff">
+        <img src="https://img.shields.io/coveralls/github/AceMood/node-yaff/master.svg" alt="Coveralls" />
+    </a>
+</p>
 
 # API
 
@@ -21,19 +26,19 @@ Finder.findInNative(dirs, extensions, ignore, resolve, reject): void;
 Finder.findInNative(dirs, extensions, ignore, resolve, reject): void;
 ```
 
-*dirs:Array|String|undefined*
+### dirs:Array|String|undefined
 
 directories to be scanned. Defaults to '.'
 
-*extensions:Array|String|undefined*
+### extensions:Array|String|undefined
 
 file extensions to be matched. Defaults to '*'
 
-*ignore:Function|undefined*
+### ignore:Function|undefined
 
 ignore function that accept a filePath and decide whether ignore it or not
 
-*native: boolean|undefined*
+### native: boolean|undefined
 
 use shell or node logic
 
