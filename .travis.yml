@@ -1,5 +1,5 @@
-language:
-  node_js
+language: node_js
+
 node_js:
   - 10
   - 9
@@ -7,11 +7,16 @@ node_js:
   - 7
   - 6
   - 4
+
+branches:
+  only:
+  - master
+
 install:
-  - npm i
-  - npm i -g istanbul
-  - npm i -g codecov
+  - npm install
+
 script:
   - npm run test
-  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
-  - codecov
+
+after_success:
+  - npm run coveralls

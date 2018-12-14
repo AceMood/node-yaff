@@ -3,6 +3,12 @@
 Yet Another Files Finder in Node. Provide a unique way to walk through specific directories
 an trigger callback function when find a matched file.
 
+[![Build Status](https://img.shields.io/travis/AceMood/node-yaff/master.svg)](https://travis-ci.org/AceMood/node-yaff)
+
+[![Download Count](https://img.shields.io/npm/dt/localeval.svg)]
+
+[![Coveralls](https://img.shields.io/coveralls/AceMood/node-yaff/master.svg)](https://coveralls.io/AceMood/node-yaff)
+
 # API
 
 ```javascript
