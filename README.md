@@ -2,7 +2,7 @@
 
 Yet Another Files Finder in Node. Provide a unique way to walk through specific directories when find all matched files.
 
-<p align="center">
+<p align="left">
     <a href="https://travis-ci.org/AceMood/node-yaff">
         <img src="https://img.shields.io/travis/AceMood/node-yaff/master.svg" alt="Build Status" />
     </a>
@@ -11,6 +11,9 @@ Yet Another Files Finder in Node. Provide a unique way to walk through specific 
     </a>
     <a href="https://coveralls.io/github/AceMood/node-yaff">
         <img src="https://img.shields.io/coveralls/github/AceMood/node-yaff/master.svg" alt="Coveralls" />
+    </a>
+    <a href="https://github.com/AceMood/node-yaff/blob/master/LICENSE">
+        <img src="https://img.shields.io/npm/l/node-yaff.svg" alt="MIT" />
     </a>
 </p>
 
@@ -48,7 +51,7 @@ Currently node-yaff only used for programmatically.
 
 ## example one
 
-find all files in current directory:
+find all files in current working directory:
 
 ```javascript
 const Finder = require('node-yaff');
@@ -59,7 +62,7 @@ f.find().then(files => {
 ```
 ## example two
 
-find all js files in current directory:
+find all js files in current working directory:
 
 ```javascript
 const Finder = require('node-yaff');

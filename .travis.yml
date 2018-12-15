@@ -8,9 +8,16 @@ node_js:
   - 6
   - 4
 
+# blacklist
+branches:
+  except:
+    - legacy
+    - experimental
+
+# whitelist
 branches:
   only:
-  - master
+    - master
 
 install:
   - npm install

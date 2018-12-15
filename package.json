@@ -1,12 +1,12 @@
 {
   "name": "node-yaff",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Yet Another Files Finder in Node",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
-    "coveralls": "npm run cover --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
