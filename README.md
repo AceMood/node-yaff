@@ -1,6 +1,6 @@
 # node-yaff
 
-Yet Another Files Finder in Node. Provide a unique way to walk through specific directories when find all matched files.
+Yet Another Files Finder in Node. Provide a unique way to walk through specific directories and find all matched files.
 
 <p align="left">
     <a href="https://travis-ci.org/AceMood/node-yaff">
@@ -11,6 +11,9 @@ Yet Another Files Finder in Node. Provide a unique way to walk through specific 
     </a>
     <a href="https://coveralls.io/github/AceMood/node-yaff">
         <img src="https://img.shields.io/coveralls/github/AceMood/node-yaff/master.svg" alt="Coveralls" />
+    </a>
+    <a href="https://github.com/AceMood/node-yaff">
+        <img src="https://img.shields.io/david/AceMood/node-yaff.svg" alt="Dependency" />
     </a>
     <a href="https://github.com/AceMood/node-yaff/blob/master/LICENSE">
         <img src="https://img.shields.io/npm/l/node-yaff.svg" alt="MIT" />

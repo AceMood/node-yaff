@@ -128,7 +128,7 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
                     reject(err)
                 }
 
-                if (stat && !stat.isDirectory()) {
+                if (stat) {
                     result.push([filePath, stat.mtime.getTime()])
                 }
 
@@ -148,11 +148,14 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
  * @param {boolean} native Optional. Whether use shell command
  */
 function Finder(dirs, extensions, ignore, native) {
-    if (!dirs || !isArray(dirs)) {
-        dirs = ['.'];
+    if (typeof dirs === 'string') {
+        dirs = [dirs]
+    }
+    if (!isArray(dirs)) {
+        dirs = ['.']
     }
 
-    this.dirs = typeof dirs === 'string' ? [dirs] : dirs;
+    this.dirs = dirs;
     this.extensions = extensions || '*';
     this.ignore = ignore || null;
     this.native = native || false;
