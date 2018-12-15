@@ -50,4 +50,22 @@ describe('find in shell', function() {
         })
     });
 
+    it('can accept multiple extensions', function() {
+        var f = new Finder(['./test/dir'], ['.js', '.css'],  null, true);
+
+        f.find().then(function(files) {
+            expect(files.length).equal(2);
+        })
+    });
+
+    it('should reject promise when some dirs absent', function() {
+        var f = new Finder(['./0'], null, null, true);
+
+        f.find().then(function(files) {}).catch(function(err) {
+            expect(err instanceof Error).to.be.true;
+            expect(err.code).to.be.a('string').to.equal('ENOENT');
+            expect(err.errno).to.be.a('number').to.equal(-2);
+        })
+    });
+
 });

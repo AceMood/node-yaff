@@ -26,8 +26,8 @@ describe('find in node', function() {
             var f = new Finder(['./test/dir'], null, null, true);
             f.find().then(function(matchedFiles) {
                 expect(matchedFiles.length).equal(files.length);
-                files.forEach(function loop(f, index) {
-                    expect(matchedFiles[index]).to.deep.equal(f);
+                files.forEach(function loop(f) {
+                    expect(matchedFiles).to.include(f);
                 })
             })
         });
@@ -38,8 +38,8 @@ describe('find in node', function() {
             var f = new Finder(['./test/dir'], null, null);
             f.find().then(function(matchedFiles) {
                 expect(matchedFiles.length).equal(files.length);
-                files.forEach(function loop(f, index) {
-                    expect(matchedFiles[index]).to.deep.equal(f);
+                files.forEach(function loop(f) {
+                    expect(matchedFiles).to.include(f);
                 })
             })
         });

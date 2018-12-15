@@ -9,10 +9,6 @@ var fs = require('fs');
 var path = require('path');
 var os = require('os');
 var spawn = require('child_process').spawn;
-var toString = Object.prototype.toString;
-var isArray = Array.isArray ? Array.isArray : function isArray(val) {
-    return toString.call(val) === '[object Array]'
-};
 
 function findInNode(dirs, extensions, ignore, resolve, reject) {
     // store files matched. second is mtime in milliseconds
@@ -54,7 +50,7 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
 
         fs.readdir(cur, function(err, names) {
             if (err) {
-                reject(err)
+                return reject(err)
             }
 
             activeCalls--;
@@ -82,7 +78,7 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
         return findInNode(dirs, extensions, ignore, resolve, reject);
     }
 
-    var args = [].concat(dirs);
+    var args = [dirs];
     // only find file type, exclude all symbolic-links and directories
     args.push('-type', 'f');
 
@@ -125,7 +121,7 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
         lines.forEach(function loop(filePath) {
             fs.stat(filePath, function(err, stat) {
                 if (err) {
-                    reject(err)
+                    return reject(err)
                 }
 
                 if (stat) {
@@ -151,7 +147,7 @@ function Finder(dirs, extensions, ignore, native) {
     if (typeof dirs === 'string') {
         dirs = [dirs]
     }
-    if (!isArray(dirs)) {
+    if (!Array.isArray(dirs)) {
         dirs = ['.']
     }
 
