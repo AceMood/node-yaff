@@ -6,11 +6,11 @@ Yet Another Files Finder in Node. Provide a unique way to walk through specific 
     <a href="https://travis-ci.org/AceMood/node-yaff">
         <img src="https://img.shields.io/travis/AceMood/node-yaff/master.svg" alt="Build Status" />
     </a>
-    <a href="https://npmcharts.com/compare/node-yaff?minimal=true">
-        <img src="https://img.shields.io/npm/dt/node-yaff.svg" alt="Downloads">
+    <a href="https://github.com/AceMood/node-yaff">
+        <img src="https://img.shields.io/github/downloads/AceMood/node-yaff/total.svg" alt="Downloads">
     </a>
-    <a href="https://coveralls.io/github/AceMood/node-yaff">
-        <img src="https://img.shields.io/coveralls/github/AceMood/node-yaff/master.svg" alt="Coveralls" />
+    <a href="https://coveralls.io/github/AceMood/node-yaff?branch=master">
+        <img src="https://img.shields.io/coveralls/github/AceMood/node-yaff/master.svg" alt="Coverage Status" />
     </a>
     <a href="https://github.com/AceMood/node-yaff">
         <img src="https://img.shields.io/david/AceMood/node-yaff.svg" alt="Dependency" />
