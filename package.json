@@ -1,6 +1,6 @@
 {
   "name": "node-yaff",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Yet Another Files Finder in Node",
   "main": "index.js",
   "scripts": {

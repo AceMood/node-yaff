@@ -62,7 +62,7 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
 
             names.forEach(readFile);
 
-            /* istanbul ignore next */
+            /* istanbul ignore if */
             if (activeCalls === 0) {
                 resolve(result)
             }
