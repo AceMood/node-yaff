@@ -62,6 +62,7 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
 
             names.forEach(readFile);
 
+            /* istanbul ignore next */
             if (activeCalls === 0) {
                 resolve(result)
             }
@@ -74,6 +75,7 @@ function findInNode(dirs, extensions, ignore, resolve, reject) {
 // @see http://man7.org/linux/man-pages/man1/find.1.html
 function findInNative(dirs, extensions, ignore, resolve, reject) {
     // in Windows we use node-fashion-find
+    /* istanbul ignore if */
     if (os.platform() === 'win32') {
         return findInNode(dirs, extensions, ignore, resolve, reject);
     }
@@ -120,13 +122,12 @@ function findInNative(dirs, extensions, ignore, resolve, reject) {
 
         lines.forEach(function loop(filePath) {
             fs.stat(filePath, function(err, stat) {
+                /* istanbul ignore if */
                 if (err) {
                     return reject(err)
                 }
 
-                if (stat) {
-                    result.push([filePath, stat.mtime.getTime()])
-                }
+                result.push([filePath, stat.mtime.getTime()]);
 
                 if (--count === 0) {
                     resolve(result)
